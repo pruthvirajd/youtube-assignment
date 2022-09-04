@@ -66,12 +66,10 @@ ifconfig
 ```
 
 5. Go to port 9090 on the above obtained IP address:
-```aidl
+
 Sample getAll API call:
-<IP_ADDRESS>:9090/api/getAll
-```
+`<IP_ADDRESS>:9090/api/getAll`
 
 ### Resources
 
 1. https://developers.google.com/youtube/v3
-2. 
