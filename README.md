@@ -70,6 +70,15 @@ ifconfig
 Sample getAll API call:
 `<IP_ADDRESS>:9090/api/getAll`
 
+### Screenshots For Reference
+1. getAll API<br><br>
+![Alt text](./screenshots/getAll.png?raw=true "getAll API")
+   <br><br>
+
+2. search API<br><br>
+![Alt text](./screenshots/search.png?raw=true "search API")
+
+
 ### Resources
 
 1. https://developers.google.com/youtube/v3
