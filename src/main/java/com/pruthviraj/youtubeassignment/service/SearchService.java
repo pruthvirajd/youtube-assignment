@@ -8,6 +8,6 @@ public interface SearchService {
 
     public List<Video> getAll();
 
-    public List<Video> searchForQueries(List<String> query);
+    public List<Video> searchForQueries(String query);
 
 }

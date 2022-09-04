@@ -1,19 +1,16 @@
 package com.pruthviraj.youtubeassignment.manager;
 
+import com.google.api.services.youtube.model.SearchResult;
 import com.pruthviraj.youtubeassignment.mapper.VideoMapper;
 import com.pruthviraj.youtubeassignment.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Component
-@Repository
-@Service
 public class VideoManagerImpl implements VideoManager {
 
     @Autowired
@@ -21,40 +18,46 @@ public class VideoManagerImpl implements VideoManager {
 
     @Override
     public List<Video> getAll() {
+        System.out.println("Getting All Videos");
         return videoMapper.getAllVideos();
     }
 
     @Override
     public void insertVideos(List<Video> videos){
-        videoMapper.insertListOfVideos(videos);
+        System.out.println("Inserting " +videos.size() + "videos");
+        if(videos.size()>0)
+            videoMapper.insertListOfVideos(videos);
     }
 
     @Override
-    public List<Video> searchForQuery(List<String> query) {
-
+    public List<Video> searchForQuery(String query) {
+        System.out.println("Search for following query: "+query);
+        //TODO: Add fuzzy Search
         List<String> queries = new ArrayList<>();
-        queries.addAll(query);
+        queries.add(query);
 
         return videoMapper.searchForQuery(queries);
     }
 
-    public void insertDummyVideos(){
+    @Override
+    public List<Video> VideoDTOTranslator(List<SearchResult> searchResultsList) {
 
         List<Video> videos = new ArrayList<>();
 
-        for(int i=1; i<101; i++){
+        for(SearchResult result : searchResultsList){
             Video video = new Video();
-            video.setPublishedDate(new Date(2022,9,3));
-            video.setHighThumbnailURL("HighThumbnailURL"+i);
-            video.setMediumThumbnailURL("MediumThumbnailURL"+i);
-            video.setDefaultThumbnailURL("DefaultThumbnailURL"+i);
-            video.setYouTubeVideoID("YouTubeVideoID"+i);
-            video.setChannelTitle("ChannelTitle"+i);
-            video.setVideoTitle("Video Title "+i);
-            video.setVideoDescription("Video Description "+i);
-            video.setYoutubeChannelID("YoutubeChannelID"+i);
+            video.setYouTubeVideoID(result.getId().getVideoId());
+            video.setVideoTitle(result.getSnippet().getTitle());
+            video.setVideoDescription(result.getSnippet().getDescription());
+            video.setPublishedDate(new Date(result.getSnippet().getPublishedAt().getValue()));
+            video.setYoutubeChannelID(result.getSnippet().getChannelId());
+            video.setChannelTitle(result.getSnippet().getChannelTitle());
+            video.setDefaultThumbnailURL(result.getSnippet().getThumbnails().getDefault().getUrl());
+            video.setMediumThumbnailURL(result.getSnippet().getThumbnails().getMedium().getUrl());
+            video.setHighThumbnailURL(result.getSnippet().getThumbnails().getHigh().getUrl());
             videos.add(video);
         }
-        videoMapper.insertListOfVideos(videos);
+        return videos;
     }
+
 }

@@ -37,17 +37,13 @@ public interface VideoMapper {
     @Select("<script>" +
             "SELECT * FROM tVideo " +
             "WHERE (0=1 " +
-            "<foreach collection='queries' item='query' index='index' separator = '' open ='' close=''>" +
-            " OR VideoTitle LIKE '%${queries}%'" +
-            "</foreach>)" +
-            "OR (0=1 " +
             "<foreach collection='queries' item='query' index='index'>" +
-            " OR VideoDescription LIKE '%${queries}%'" +
+            " OR VideoTitle LIKE '%${query}%'" +
+            "</foreach>)" +
+            " OR (0=1 " +
+            "<foreach collection='queries' item='query' index='index'>" +
+            " OR VideoDescription LIKE '%${query}%' " +
             "</foreach>)" +
             "</script>")
-//    @Select("<script>" +
-//            "SELECT * FROM tVideo " +
-//            "WHERE VideoTitle LIKE '%${param1}%' OR VideoDescription LIKE '%${param1}%'" +
-//            "</script>")
     List<Video> searchForQuery(@Param("queries") List<String> queries);
 }

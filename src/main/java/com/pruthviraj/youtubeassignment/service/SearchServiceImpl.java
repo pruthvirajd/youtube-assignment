@@ -25,14 +25,9 @@ public class SearchServiceImpl implements SearchService {
         return videoManager.getAll();
     }
 
-    @GetMapping("/insertDummy/")
-    public void insertDummy() {
-        videoManager.insertDummyVideos();
-    }
-
     @Override
     @GetMapping("/searchQuery")
-    public List<Video> searchForQueries(@RequestParam List<String> query) {
+    public List<Video> searchForQueries(@RequestParam String query) {
         return videoManager.searchForQuery(query);
     }
 }
