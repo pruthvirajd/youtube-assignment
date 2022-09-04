@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -23,6 +22,11 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private VideoManagerImpl videoManager;
 
+    /**
+     * @param page for returning the requesting page
+     * @param size for defining size per page
+     * @return a page of list of Videos in descending order of date
+     */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @Override
     public Page<Video> getAll(Integer page, Integer size) {
@@ -30,9 +34,13 @@ public class SearchServiceImpl implements SearchService {
         return videoManager.getAll(pageable);
     }
 
+    /**
+     * @param query search query that the user wants
+     * @return all videos whose title or description is similar to the query
+     */
     @Override
-    @GetMapping("/searchQuery")
-    public List<Video> searchForQueries(@RequestParam String query) {
-        return videoManager.searchForQuery(query);
+    @GetMapping("/search")
+    public List<Video> search(@RequestParam String query) {
+        return videoManager.search(query);
     }
 }

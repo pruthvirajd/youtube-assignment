@@ -31,6 +31,7 @@ public class YoutubeDataFetchScheduler {
         String key = apiKeys.get(index);
 
         try {
+            //Only make REST call if any API key has yet to be checked for exceeded quota
             if (index < apiKeys.size()) {
                 List<SearchResult> response = youtubeDataFetch.fetchData(key);
                 List<Video> videos = videoManager.VideoDTOTranslator(response);
@@ -39,10 +40,12 @@ public class YoutubeDataFetchScheduler {
             }
         }
         catch (GoogleJsonResponseException e) {
+            //If quotaExceeded exception is thrown then we log the error and update the index for using next API token
             if (e.getDetails().getErrors().stream().anyMatch(i -> i.getReason().equals("quotaExceeded"))) {
                 System.err.println("Quota Exceeded for current API key.\nUsing next API key.");
                 index++;
             }
+            //If all API keys have been exhausted then we log the error and request user to provide new API keys
             if (index == apiKeys.size()) {
                 System.err.println("Quota Exceeded for all provided API keys.\n Please provide new API keys.");
             }

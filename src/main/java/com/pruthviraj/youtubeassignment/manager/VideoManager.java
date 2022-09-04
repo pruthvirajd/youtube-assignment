@@ -15,12 +15,28 @@ import java.util.List;
 @Service
 public interface VideoManager {
 
+    /**
+     * Gets all video information in pages from the database
+     * @param pageable For determining page, size and sorting requirement
+     * @return a page of videos
+     */
     public Page<Video> getAll(Pageable pageable);
 
+    /**
+     * @param videos list of videos to insert into db
+     */
     public void insertVideos(List<Video> videos);
 
-    public List<Video> searchForQuery(String queries);
+    /**
+     * @param query the input query user wants to search for
+     * @return all videos whose title or description matches the search query
+     */
+    public List<Video> search(String query);
 
-    public List<Video> VideoDTOTranslator(List<SearchResult> searchResults);
+    /**
+     * @param searchResultsList list of response objects from YouTube API hit
+     * @return list of videos after converting the response objects to video model class
+     */
+    public List<Video> VideoDTOTranslator(List<SearchResult> searchResultsList);
 
 }
