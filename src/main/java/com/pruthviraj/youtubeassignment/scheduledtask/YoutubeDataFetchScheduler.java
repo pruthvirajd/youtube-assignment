@@ -1,4 +1,4 @@
-package com.pruthviraj.youtubeassignment.scheduledtasks;
+package com.pruthviraj.youtubeassignment.scheduledtask;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.youtube.model.SearchResult;
@@ -23,7 +23,7 @@ public class YoutubeDataFetchScheduler {
 
     public static int index;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/15 * * * * *")
     public void fetchAndStoreYoutubeData() {
 
         List<String> apiKeys = youtubeDataFetch.getAPIKeys();

@@ -5,10 +5,13 @@ import com.pruthviraj.youtubeassignment.model.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -20,15 +23,11 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     private VideoManagerImpl videoManager;
 
-    //@GetMapping("/getAll/")
-    public List<Video> getAll(@RequestParam Integer page, @RequestParam Integer size) {
-        return videoManager.getAll();
-    }
-
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @Override
-    @GetMapping("/getAll/")
-    public List<Video> getAll() {
-        return videoManager.getAll();
+    public Page<Video> getAll(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page!=null ? page : 0, size!=null ? size : 5, Sort.Direction.DESC, "publishedDate");
+        return videoManager.getAll(pageable);
     }
 
     @Override

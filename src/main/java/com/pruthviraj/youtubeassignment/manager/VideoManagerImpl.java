@@ -4,10 +4,12 @@ import com.google.api.services.youtube.model.SearchResult;
 import com.pruthviraj.youtubeassignment.model.Video;
 import com.pruthviraj.youtubeassignment.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +20,9 @@ public class VideoManagerImpl implements VideoManager {
     private VideoRepository videoRepository;
 
     @Override
-    public List<Video> getAll() {
+    public Page<Video> getAll(Pageable pageable) {
         System.out.println("Getting All Videos");
-        return videoRepository.findAll();
+        return videoRepository.findAll(pageable);
     }
 
     @Override
