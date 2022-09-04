@@ -1,12 +1,13 @@
 package com.pruthviraj.youtubeassignment.manager;
 
 import com.google.api.services.youtube.model.SearchResult;
-import com.pruthviraj.youtubeassignment.mapper.VideoMapper;
 import com.pruthviraj.youtubeassignment.model.Video;
+import com.pruthviraj.youtubeassignment.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,19 +15,19 @@ import java.util.List;
 public class VideoManagerImpl implements VideoManager {
 
     @Autowired
-    private VideoMapper videoMapper;
+    private VideoRepository videoRepository;
 
     @Override
     public List<Video> getAll() {
         System.out.println("Getting All Videos");
-        return videoMapper.getAllVideos();
+        return videoRepository.findAll();
     }
 
     @Override
     public void insertVideos(List<Video> videos){
-        System.out.println("Inserting " +videos.size() + "videos");
+        System.out.println("Inserting " +videos.size() + " videos");
         if(videos.size()>0)
-            videoMapper.insertListOfVideos(videos);
+            videoRepository.saveAll(videos);
     }
 
     @Override
@@ -36,7 +37,11 @@ public class VideoManagerImpl implements VideoManager {
         List<String> queries = new ArrayList<>();
         queries.add(query);
 
-        return videoMapper.searchForQuery(queries);
+        List<Video> videos = new ArrayList<>();
+        queries.stream().forEach(q ->{videos.addAll(videoRepository.findByVideoTitleContaining(q));
+            videos.addAll(videoRepository.findByVideoDescriptionContaining(q));});
+
+        return videos;
     }
 
     @Override
@@ -45,16 +50,11 @@ public class VideoManagerImpl implements VideoManager {
         List<Video> videos = new ArrayList<>();
 
         for(SearchResult result : searchResultsList){
-            Video video = new Video();
-            video.setYouTubeVideoID(result.getId().getVideoId());
-            video.setVideoTitle(result.getSnippet().getTitle());
-            video.setVideoDescription(result.getSnippet().getDescription());
-            video.setPublishedDate(new Date(result.getSnippet().getPublishedAt().getValue()));
-            video.setYoutubeChannelID(result.getSnippet().getChannelId());
-            video.setChannelTitle(result.getSnippet().getChannelTitle());
-            video.setDefaultThumbnailURL(result.getSnippet().getThumbnails().getDefault().getUrl());
-            video.setMediumThumbnailURL(result.getSnippet().getThumbnails().getMedium().getUrl());
-            video.setHighThumbnailURL(result.getSnippet().getThumbnails().getHigh().getUrl());
+            Video video = new Video(result.getId().getVideoId(), result.getSnippet().getTitle(), result.getSnippet().getDescription(),
+                    new Date(result.getSnippet().getPublishedAt().getValue()), result.getSnippet().getChannelId(),
+                    result.getSnippet().getChannelTitle(), result.getSnippet().getThumbnails().getDefault().getUrl(),
+                    result.getSnippet().getThumbnails().getMedium().getUrl(),
+                    result.getSnippet().getThumbnails().getHigh().getUrl());
             videos.add(video);
         }
         return videos;

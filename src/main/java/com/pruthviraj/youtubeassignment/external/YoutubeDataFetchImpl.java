@@ -46,8 +46,9 @@ public class YoutubeDataFetchImpl implements YoutubeDataFetch {
             search.setQ(query);
             search.setType("video");
             search.setRelevanceLanguage("en");
+            search.setOrder("date");
             //For finding videos that were uploaded after the previous API hit
-            search.setPublishedAfter(new DateTime(System.currentTimeMillis()- 10000L));
+            //search.setPublishedAfter(new DateTime(System.currentTimeMillis()- 10000L));
             search.setFields("items(" +
                     "id/videoId," +
                     "snippet/publishedAt," +

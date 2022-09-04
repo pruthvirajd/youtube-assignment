@@ -1,14 +1,22 @@
 package com.pruthviraj.youtubeassignment.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name="tVideoInfo")
 public class Video {
+
+    @Id
+    @GeneratedValue
     private int videoID;
 
-    private String youTubeVideoID;
+    private String youtubeVideoID;
 
+    @Column(name="VideoTitle", nullable = false)
     private String videoTitle;
 
+    @Column(name="VideoDescription", nullable = false, length = 500)
     private String videoDescription;
 
     private Date publishedDate;
@@ -23,6 +31,21 @@ public class Video {
 
     private String highThumbnailURL;
 
+    public Video(){}
+
+    public Video(String youtubeVideoID, String videoTitle, String videoDescription, Date publishedDate, String youtubeChannelID, String channelTitle, String defaultThumbnailURL, String mediumThumbnailURL, String highThumbnailURL) {
+        this.youtubeVideoID = youtubeVideoID;
+        this.videoTitle = videoTitle;
+        this.videoDescription = videoDescription;
+        this.publishedDate = publishedDate;
+        this.youtubeChannelID = youtubeChannelID;
+        this.channelTitle = channelTitle;
+        this.defaultThumbnailURL = defaultThumbnailURL;
+        this.mediumThumbnailURL = mediumThumbnailURL;
+        this.highThumbnailURL = highThumbnailURL;
+    }
+
+
     public int getVideoID() {
         return videoID;
     }
@@ -31,12 +54,12 @@ public class Video {
         this.videoID = videoID;
     }
 
-    public String getYouTubeVideoID() {
-        return youTubeVideoID;
+    public String getyoutubeVideoID() {
+        return youtubeVideoID;
     }
 
-    public void setYouTubeVideoID(String youTubeVideoID) {
-        this.youTubeVideoID = youTubeVideoID;
+    public void setyoutubeVideoID(String youtubeVideoID) {
+        this.youtubeVideoID = youtubeVideoID;
     }
 
     public String getVideoTitle() {

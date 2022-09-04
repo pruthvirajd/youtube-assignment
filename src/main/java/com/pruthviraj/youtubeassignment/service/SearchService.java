@@ -1,7 +1,6 @@
 package com.pruthviraj.youtubeassignment.service;
 
 import com.pruthviraj.youtubeassignment.model.Video;
-
 import java.util.List;
 
 public interface SearchService {
